@@ -8,7 +8,7 @@ function createWindow () {
       nodeIntegration: true
     }
   })
-  window.loadFile('./src/index.html')
+  window.loadFile('index.html')
   window.on('closed', function () {
     window = null
   })
