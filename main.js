@@ -1,4 +1,6 @@
 const {app, BrowserWindow, Menu} = require('electron')
+const url = require('url');
+const path = require('path');
 let window
 //delet if non wokr
 const template = [
@@ -6,6 +8,12 @@ const template = [
     label: 'Go home',
     click() {
       window.loadURL(`file://${__dirname}/src/index.html`)
+    }
+  },
+  {
+    label: 'Dev tools',
+    click() {
+      window.webContents.openDevTools();
     }
   }
 ]
@@ -23,6 +31,11 @@ function createWindow () {
     }
   })
   window.loadFile('./src/index.html')
+  window.loadURL(url.format ({
+    pathname: path.join(__dirname, 'index.html'),
+    protocol: 'file',
+    slashes: true
+  }))
   window.on('closed', function () {
     window = null
   })

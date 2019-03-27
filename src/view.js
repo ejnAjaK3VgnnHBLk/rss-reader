@@ -1,3 +1,5 @@
+var fs = require('fs')
+
 document.addEventListener("keydown", function (e) {
   if (e.which === 123) {
     require('remote').getCurrentWindow().toggleDevTools();
@@ -5,6 +7,16 @@ document.addEventListener("keydown", function (e) {
     location.reload();
   }
 });
+
+// For test purposes
+function edit() {
+  fs.appendFile('feeds', 'works', function (err) {
+    if (err) throw err;
+    console.log('Saved!');
+  })
+}
+// For
+
 
 /* WIP:
 var divtwo = document.createElement('div');

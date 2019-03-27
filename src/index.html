@@ -4,13 +4,22 @@
       <meta charset="UTF-8">
       <title>RSS Reaader</title>
       <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css" />
+      <style>
+
+      </style>
    </head>
 
-   <body onload="rss()">
+   <body onload="rss() loadAndDisplayContacts()">
       <div class="container">
-         <h1>RSS Feed reader</h1>
-         <button class="button" onclick="addFeed()">DO a thing</button>
-         <script src="./view.js" ></script>
+        <div class="rssFeedDiv">
+          <h1>RSS Feed reader</h1>
+           <button class="button" onclick="addFeed()">DO a thing</button>
+           <script src="./view.js" ></script>
+         </div>
+         <div class="feedAddDiv" style="hidden">
+          <button onclick="edit()">Edit</button>
+         </div>
+
       </div>
    </body>
 </html>
