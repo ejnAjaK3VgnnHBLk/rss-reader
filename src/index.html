@@ -2,15 +2,14 @@
 <html>
    <head>
       <meta charset="UTF-8">
-      <title>Hello World!</title>
-      <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css" />
+      <title>RSS Reaader</title>
+      <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css" />
    </head>
 
-   <body>
+   <body onload="rss()">
       <div class="container">
          <h1>RSS Feed reader</h1>
-         <h3 id="click-counter"></h3>
-         <!--<button class="btn btn-success" id="countbtn">Click here</button>-->
+         <button class="button" onclick="addFeed()">DO a thing</button>
          <script src="./view.js" ></script>
       </div>
    </body>

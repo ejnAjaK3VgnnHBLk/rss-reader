@@ -1,5 +1,19 @@
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, Menu} = require('electron')
 let window
+//delet if non wokr
+const template = [
+  {
+    label: 'Go home',
+    click() {
+      window.loadURL(`file://${__dirname}/src/index.html`)
+    }
+  }
+]
+
+const menu = Menu.buildFromTemplate(template)
+Menu.setApplicationMenu(menu)
+
+//ree
 
 function createWindow () {
   // Create the browser window.
