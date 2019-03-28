@@ -30,9 +30,9 @@ function createWindow () {
       nodeIntegration: true
     }
   })
-  window.loadFile('./src/index.html')
+  window.loadFile(`./src/index.html`)
   window.loadURL(url.format ({
-    pathname: path.join(__dirname, 'index.html'),
+    pathname: path.join(__dirname, `./src/index.html`), // MY OWN PROGRAMMING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     protocol: 'file',
     slashes: true
   }))
