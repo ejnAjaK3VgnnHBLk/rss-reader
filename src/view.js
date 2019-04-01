@@ -16,14 +16,12 @@ function rss() {
   var div = document.createElement("div");
   div.setAttribute("id", "rssFeedDiv");
 
-
-  // What does this even do?: console.log(Object.entries(object).sort((a, b) => a-b));
-  // Object
- /*var leng = object.feeds.length;
-  for (i = 0; i < object.feeds.length; i++) {
-    parser.parseURL(Object.entries(object)[i], function(err, parsed) {
-      document.createTextNode(parsed.feed.title);
+  for (let unifiedrl in jsonContent) {
+    var currentURL = jsonContent[unifiedrl].url;
+    parser.parseURL(currentURL, function(err, parsed) {;
       parsed.feed.entries.forEach(function(entry) {
+        console.log('Name of feed: ' + jsonContent.name);
+
         // Create elements.
         var element = document.createElement("h3");
         // Creaate id for the h3, so that they aren"t overwritten
@@ -39,44 +37,12 @@ function rss() {
         var result = title.link(entry.link);
         // Add hyperlink to the h3
         document.getElementById(titleback).innerHTML = result;
+
       })
-    })
-  }*/
-
-  // All is working except for here
-  for (var unifiedrl in jsonContent) {
-    // reference as jsonContent[urL]
-    var currentURL = jsonContent[unifiedrl].toString();
-    parser.parseURL(currentURL, function(err, parsed) {
-      console.log(parsed);
-      /*parsed.feed.entries.forEach(function(entry) {
-        console.log('Title: ' + entry.title);
-        console.log('URL: ' + entry.link);
-      })*/
-    })
+    });
   }
-
-/*  parser.parseURL("http://rss.slashdot.org/Slashdot/slashdotMain/to", function(err, parsed) {
-    document.createTextNode(parsed.feed.title);
-    parsed.feed.entries.forEach(function(entry) {
-      // Create elements.
-      var element = document.createElement("h3");
-      // Creaate id for the h3, so that they aren"t overwritten
-      var titleback = (entry.title).replace(/ /g,"");
-      // Add the id we just made to the h3 tag.
-      element.setAttribute("id", titleback);
-      // Add h3 tag with id to the document.
-      div.appendChild(element);
-      document.body.appendChild(div);
-      // Get article title and url
-      var title = entry.title;
-      // Make text become hyperlink
-      var result = title.link(entry.link);
-      // Add hyperlink to the h3
-      document.getElementById(titleback).innerHTML = result;
-    })
-  })*/
 }
+
 function addFeed() {
   var rss = document.getElementById("rssFeedDiv");
   var feedAdd = document.getElementById("feedAddDiv");
