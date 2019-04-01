@@ -1,1 +1,1 @@
-{"feeds":{"name":"reddit","url":"http://reddit.com/.rss"}}
+{"feeds":[{"name":"reddit","url":"http://reddit.com/.rss"},{"name":"slashdot","url":"http://rss.slashdot.org/Slashdot/slashdotMain/to"}]}

@@ -6,6 +6,12 @@ var filePath = path.join(__dirname, '../feeds.json');
 
 var contentss = fs.readFileSync("feeds.json");
 var jsonContent = JSON.parse(contentss);
+console.log(jsonContent);
+
+
+var jsonContent;
+var currentURL;
+var currentFeed;
 
 
 function rss() {
@@ -15,13 +21,20 @@ function rss() {
   divt.style.display = "none";
   var div = document.createElement("div");
   div.setAttribute("id", "rssFeedDiv");
+  for (let unifiedrl in jsonContent.feeds) {
+    var currentURL = jsonContent.feeds[unifiedrl].url;
+    var currentFeed = jsonContent.feeds[unifiedrl].name;
+    parser.parseURL(currentURL, function(err, parsed) {
+      console.log(jsonContent.feeds[unifiedrl].name);
+      // Only print the name of the feed once.
 
-  for (let unifiedrl in jsonContent) {
-    var currentURL = jsonContent[unifiedrl].url;
-    parser.parseURL(currentURL, function(err, parsed) {;
+      var elementTitle = document.createElement("h2");
+      elementTitle.setAttribute("id", ((jsonContent.feeds[unifiedrl].name).replace(/ /g,"")));
+      document.body.appendChild(elementTitle);
+      document.getElementById((jsonContent.feeds[unifiedrl].name).replace(/ /g,"")).innerHTML = (jsonContent.feeds[unifiedrl].name);
+
       parsed.feed.entries.forEach(function(entry) {
-        console.log('Name of feed: ' + jsonContent.name);
-
+        console.log(entry.title);
         // Create elements.
         var element = document.createElement("h3");
         // Creaate id for the h3, so that they aren"t overwritten
