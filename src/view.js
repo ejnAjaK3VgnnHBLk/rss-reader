@@ -21,17 +21,27 @@ function rss() {
   divt.style.display = "none";
   var div = document.createElement("div");
   div.setAttribute("id", "rssFeedDiv");
-  for (let unifiedrl in jsonContent.feeds) {
-    var currentURL = jsonContent.feeds[unifiedrl].url;
-    var currentFeed = jsonContent.feeds[unifiedrl].name;
-    parser.parseURL(currentURL, function(err, parsed) {
-      console.log(jsonContent.feeds[unifiedrl].name);
-      // Only print the name of the feed once.
 
-      var elementTitle = document.createElement("h2");
-      elementTitle.setAttribute("id", ((jsonContent.feeds[unifiedrl].name).replace(/ /g,"")));
-      document.body.appendChild(elementTitle);
-      document.getElementById((jsonContent.feeds[unifiedrl].name).replace(/ /g,"")).innerHTML = (jsonContent.feeds[unifiedrl].name);
+  for (let unifiedrl in jsonContent.feeds) {
+    var divEntry = document.createElement("div");
+    var divEntryIdVar = (jsonContent.feeds[unifiedrl].name).replace(/ /g,"");
+    var divEntryIdVarName = 'div-'+ divEntryIdVar;
+    divEntry.setAttribute("id", divEntryIdVarName);
+    document.body.appendChild(divEntry);
+
+    var currentURL = jsonContent.feeds[unifiedrl].url;
+
+
+    // do a thing
+    var elementTwo = document.createElement("h2");
+    var titlebackTwo = (jsonContent.feeds[unifiedrl].name).replace(/ /g,"");
+    elementTwo.setAttribute("id", titlebackTwo);
+    document.body.appendChild(elementTwo);
+    var titleTwo = jsonContent.feeds[unifiedrl].name;
+    document.getElementById(divEntryIdVarName).appendChild(elementTwo);
+    document.getElementById(titlebackTwo).innerHTML = titleTwo;
+
+    parser.parseURL(currentURL, function(err, parsed) {
 
       parsed.feed.entries.forEach(function(entry) {
         console.log(entry.title);
@@ -42,17 +52,17 @@ function rss() {
         // Add the id we just made to the h3 tag.
         element.setAttribute("id", titleback);
         // Add h3 tag with id to the document.
-        div.appendChild(element);
-        document.body.appendChild(div);
+        document.getElementById(divEntryIdVarName).appendChild(element);
+      //  document.body.appendChild(div);
         // Get article title and url
         var title = entry.title;
         // Make text become hyperlink
         var result = title.link(entry.link);
         // Add hyperlink to the h3
         document.getElementById(titleback).innerHTML = result;
-
       })
     });
+    // runs after
   }
 }
 
