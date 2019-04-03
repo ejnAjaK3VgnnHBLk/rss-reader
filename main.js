@@ -25,14 +25,14 @@ Menu.setApplicationMenu(menu)
 
 function createWindow () {
   // Create the browser window.
-  window = new BrowserWindow({width: 1000,height: 800,
+  window = new BrowserWindow({width: 1150,height: 900,
     webPreferences: {
       nodeIntegration: true
     }
   })
   window.loadFile(`./src/index.html`)
   window.loadURL(url.format ({
-    pathname: path.join(__dirname, `./src/index.html`), // MY OWN PROGRAMMING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    pathname: path.join(__dirname, `./src/index.html`),
     protocol: 'file',
     slashes: true
   }))
