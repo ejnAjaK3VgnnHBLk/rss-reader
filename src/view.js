@@ -1,105 +1,98 @@
 var fs = require("fs");
+var path = require("path");
+var parser = require("rss-parser-browser");
+var jsonfile = require("jsonfile");
+
 var jsonStr;
-var path = require('path');
 
-var filePath = path.join(__dirname, '../feeds.json');
+var content = fs.readFileSync("feeds.json");
+var jsonContent = JSON.parse(content);
 
-var contentss = fs.readFileSync("feeds.json");
-var jsonContent = JSON.parse(contentss);
-console.log(jsonContent);
+var addFeedsHereDiv = document.getElementById("addFeedsHere");
+var feedEntriesDiv = document.getElementById("content"); // Update this
 
+function rssOnLoad() {
+  for (let currentFeedd in jsonContent.feeds) {
+    var feedName = document.createTextNode(jsonContent.feeds[currentFeedd].name);
+    var feedEntry = document.createElement("li");
+    var a = document.createElement("a");
+    var ul = document.getElementById("mainMenu");
+    feedEntry.setAttribute("id", "ul-" + currentFeedd);
+    ul.appendChild(feedEntry);
+    a.setAttribute("href", "javascript:feedClicked('"+jsonContent.feeds[currentFeedd].url+"')");
+    a.appendChild(feedName);
+    document.getElementById("ul-"+currentFeedd).appendChild(a);
+  };
+  feedClicked(jsonContent.feeds[0].url);
+}
 
-var jsonContent;
-var currentURL;
-var currentFeed;
+function feedClicked(url) {
+  feedEntriesDiv.innerHTML = ''; // clear the div
+  parser.parseURL(url, function(err, parsed) {
+    parsed.feed.entries.forEach(function(entry) {
+      var addToMe = document.getElementById("content");
+      var text = document.createTextNode(entry.title);
+      var entryy = document.createElement("p");
+      var hr = document.createElement("hr");
 
+      var titleback = (entry.title).replace(/ /g,"");
+      var result = entry.title.link(entry.link);
+      //entryy.appendChild(result); // Append text to h3
 
-function rss() {
-  var parser = require("rss-parser-browser");
-  console.log(jsonContent);
-  var divt = document.getElementById("feedAddDiv");
-  divt.style.display = "none";
-  var div = document.createElement("div");
-  div.setAttribute("id", "rssFeedDiv");
+      entryy.setAttribute("id", titleback); // Add id to h3
+      entryy.setAttribute("style", "font-weight: normal; font-color: black;")
 
-  for (let unifiedrl in jsonContent.feeds) {
-    var divEntry = document.createElement("div");
-    var divEntryIdVar = (jsonContent.feeds[unifiedrl].name).replace(/ /g,"");
-    var divEntryIdVarName = 'div-'+ divEntryIdVar;
-    divEntry.setAttribute("id", divEntryIdVarName);
-    document.body.appendChild(divEntry);
+      feedEntriesDiv.appendChild(entryy); // Append h3 to div
 
-    var currentURL = jsonContent.feeds[unifiedrl].url;
-
-
-    // do a thing
-    var elementTwo = document.createElement("h2");
-    var titlebackTwo = (jsonContent.feeds[unifiedrl].name).replace(/ /g,"");
-    elementTwo.setAttribute("id", titlebackTwo);
-    document.body.appendChild(elementTwo);
-    var titleTwo = jsonContent.feeds[unifiedrl].name;
-    document.getElementById(divEntryIdVarName).appendChild(elementTwo);
-    document.getElementById(titlebackTwo).innerHTML = titleTwo;
-
-    parser.parseURL(currentURL, function(err, parsed) {
-
-      parsed.feed.entries.forEach(function(entry) {
-        console.log(entry.title);
-        // Create elements.
-        var element = document.createElement("h3");
-        // Creaate id for the h3, so that they aren"t overwritten
-        var titleback = (entry.title).replace(/ /g,"");
-        // Add the id we just made to the h3 tag.
-        element.setAttribute("id", titleback);
-        // Add h3 tag with id to the document.
-        document.getElementById(divEntryIdVarName).appendChild(element);
-      //  document.body.appendChild(div);
-        // Get article title and url
-        var title = entry.title;
-        // Make text become hyperlink
-        var result = title.link(entry.link);
-        // Add hyperlink to the h3
-        document.getElementById(titleback).innerHTML = result;
-      })
-    });
-    // runs after
-  }
+      document.getElementById(titleback).innerHTML = result;
+      feedEntriesDiv.appendChild(hr);
+    })
+  });
 }
 
 function addFeed() {
-  var rss = document.getElementById("rssFeedDiv");
-  var feedAdd = document.getElementById("feedAddDiv");
-  if (rss.style.display == "none") {
-    rss.style.display = "block";
-    feedAdd.style.display = "none";
-    // Hide feed adding
-  } else {
-    rss.style.display = "none";
-    feedAdd.style.display = "block";
-    // Show feed adding thing
-  }
+    feedEntriesDiv.innerHTML = '';
+    var name = document.createElement('input');
+    var url = document.createElement('input');
+    var button = document.createElement('button');
+    var br = document.createElement('br');
+
+    name.setAttribute("type", "text");
+    name.setAttribute("placeholder", "Name");
+    name.setAttribute("id", "text-name");
+    name.setAttribute("class",  "form-control");
+    url.setAttribute("type", "text");
+    url.setAttribute("placeholder", "URL");
+    url.setAttribute("id", "text-url");
+    url.setAttribute("class", "form-control")
+    button.setAttribute("onclick", "createFeed()");
+    button.setAttribute("class", "btn btn-outline-dark")
+    button.innerHTML = 'Add the feed';
+
+    feedEntriesDiv.appendChild(name);
+    feedEntriesDiv.appendChild(br);
+    feedEntriesDiv.appendChild(url);
+    feedEntriesDiv.appendChild(br);
+    feedEntriesDiv.appendChild(button);
 }
 
-function edit() {
+function createFeed() {
   const file = "feeds.json";
   const jsonfile = require("jsonfile");
+  var jsonContent = fs.readFileSync(file);
+
   // Name element
-  var dataone = document.getElementById("yeet").value;
+  var dataone = document.getElementById("text-name").value;
   // URL element
-  var datatwo = document.getElementById("yeettwo").value;
-
-  // console.log(jsonStr);
-  var obje = JSON.parse(jsonStr);
-
+  var datatwo = document.getElementById("text-url").value;
+  var obje = JSON.parse(jsonContent);
   obje['feeds'].push({"name":dataone,"url":datatwo});
   jsonStr = JSON.stringify(obje);
-  // console.log(jsonStr);
-
   fs.writeFile('feeds.json', jsonStr, (err) => {
     if (err) {
       console.error(err);
       return;
     };
-    // console.log('File has been written');
+    location.reload();
   })
 }
