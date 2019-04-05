@@ -10,12 +10,12 @@ const template = [
       window.loadURL(`file://${__dirname}/src/index.html`)
     }
   },
-  {
+  /*{
     label: 'Dev tools',
     click() {
       window.webContents.openDevTools();
     }
-  }
+  }*/
 ]
 
 const menu = Menu.buildFromTemplate(template)
