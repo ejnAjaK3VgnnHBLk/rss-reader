@@ -30,23 +30,28 @@ function feedClicked(url) {
   feedEntriesDiv.innerHTML = ''; // clear the div
   parser.parseURL(url, function(err, parsed) {
     parsed.feed.entries.forEach(function(entry) { // entry is giving us a name and url
-      var addToMe = document.getElementById("content");
-      var text = document.createTextNode(entry.title);
-      var entryy = document.createElement("p");
-      var hr = document.createElement("hr");
+      var entryItem = document.createElement("a");
+      var line = document.createElement("hr");
 
-      var titleback = (entry.title).replace(/ /g,""); // fix this
-      var result = entry.title.link(entry.link);
+      entryItem.setAttribute("href", "javascript:showPage('"+entry.link+"')");
+      entryItem.innerHTML = entry.title;
 
-      entryy.setAttribute("id", titleback); // Add id to h3
-      entryy.setAttribute("style", "font-weight: normal; font-color: black;")
-
-      feedEntriesDiv.appendChild(entryy); // Append h3 to div
-
-      document.getElementById(titleback).innerHTML = result;
-      feedEntriesDiv.appendChild(hr);
+      feedEntriesDiv.appendChild(entryItem);
+      feedEntriesDiv.appendChild(document.createElement("hr"));
     })
   });
+}
+
+function showPage(url) {
+  var iframe = document.createElement("iframe");
+  var content = document.getElementById("content");
+
+  content.innerHTML = '';
+
+  iframe.setAttribute("src", url);
+  iframe.setAttribute("style", "width: 100%; height: 100%;");
+
+  content.appendChild(iframe);
 }
 
 function addFeedScreen() {
