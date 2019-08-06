@@ -12,16 +12,16 @@ var addFeedsHereDiv = document.getElementById("addFeedsHere");
 var feedEntriesDiv = document.getElementById("content"); // Update this
 
 function rssOnLoad() {
-  for (let currentFeedd in jsonContent.feeds) {
-    var feedName = document.createTextNode(jsonContent.feeds[currentFeedd].name);
+  for (let currentItem in jsonContent.feeds) {
+    var feedName = document.createTextNode(jsonContent.feeds[currentItem].name);
     var feedEntry = document.createElement("li");
     var a = document.createElement("a");
     var ul = document.getElementById("mainMenu");
-    feedEntry.setAttribute("id", "ul-" + currentFeedd);
+    feedEntry.setAttribute("id", "ul-" + currentItem);
     ul.appendChild(feedEntry);
-    a.setAttribute("href", "javascript:feedClicked('"+jsonContent.feeds[currentFeedd].url+"')");
+    a.setAttribute("href", "javascript:feedClicked('"+jsonContent.feeds[currentItem].url+"')");
     a.appendChild(feedName);
-    document.getElementById("ul-"+currentFeedd).appendChild(a);
+    document.getElementById("ul-"+currentItem).appendChild(a);
   };
   feedClicked(jsonContent.feeds[0].url);
 }
@@ -29,15 +29,14 @@ function rssOnLoad() {
 function feedClicked(url) {
   feedEntriesDiv.innerHTML = ''; // clear the div
   parser.parseURL(url, function(err, parsed) {
-    parsed.feed.entries.forEach(function(entry) {
+    parsed.feed.entries.forEach(function(entry) { // entry is giving us a name and url
       var addToMe = document.getElementById("content");
       var text = document.createTextNode(entry.title);
       var entryy = document.createElement("p");
       var hr = document.createElement("hr");
 
-      var titleback = (entry.title).replace(/ /g,"");
+      var titleback = (entry.title).replace(/ /g,""); // fix this
       var result = entry.title.link(entry.link);
-      //entryy.appendChild(result); // Append text to h3
 
       entryy.setAttribute("id", titleback); // Add id to h3
       entryy.setAttribute("style", "font-weight: normal; font-color: black;")
@@ -50,12 +49,13 @@ function feedClicked(url) {
   });
 }
 
-function addFeed() {
+function addFeedScreen() {
     feedEntriesDiv.innerHTML = '';
     var name = document.createElement('input');
     var url = document.createElement('input');
     var button = document.createElement('button');
     var br = document.createElement('br');
+    var header = document.createElement('h3');
 
     name.setAttribute("type", "text");
     name.setAttribute("placeholder", "Name");
@@ -65,10 +65,12 @@ function addFeed() {
     url.setAttribute("placeholder", "URL");
     url.setAttribute("id", "text-url");
     url.setAttribute("class", "form-control")
-    button.setAttribute("onclick", "createFeed()");
+    button.setAttribute("onclick", "addFeed()");
     button.setAttribute("class", "btn btn-outline-dark")
     button.innerHTML = 'Add the feed';
+    header.innerHTML = 'Add a feed.'
 
+    feedEntriesDiv.appendChild(header);
     feedEntriesDiv.appendChild(name);
     feedEntriesDiv.appendChild(br);
     feedEntriesDiv.appendChild(url);
@@ -76,19 +78,59 @@ function addFeed() {
     feedEntriesDiv.appendChild(button);
 }
 
-function createFeed() {
+function addFeed() {
   const file = "feeds.json";
   const jsonfile = require("jsonfile");
   var jsonContent = fs.readFileSync(file);
 
   // Name element
-  var dataone = document.getElementById("text-name").value;
+  var theName = document.getElementById("text-name").value;
   // URL element
-  var datatwo = document.getElementById("text-url").value;
+  var theURL = document.getElementById("text-url").value;
   var obje = JSON.parse(jsonContent);
-  obje['feeds'].push({"name":dataone,"url":datatwo});
+  obje['feeds'].push({"name":theName,"url":theURL});
   jsonStr = JSON.stringify(obje);
-  fs.writeFile('feeds.json', jsonStr, (err) => {
+  writeToFile('feeds.json', jsonStr);
+}
+
+function removeFeedScreen() {
+  var body = document.getElementById("content");
+  var feed = document.createElement("input");
+  var button = document.createElement("button");
+  var indent = document.createElement("p");
+  var header = document.createElement("h3");
+
+  body.innerHTML = "";
+  feed.setAttribute("type", "text");
+  feed.setAttribute("id", "feedToRemove");
+  feed.setAttribute("placeholder", "Enter the name of the feed to remove.");
+  feed.setAttribute("class", "form-control");
+
+  button.setAttribute("onclick", "removeFeed()");
+  button.setAttribute("class", "btn btn-outline-dark")
+  button.innerHTML="Remove the feed";
+  header.innerHTML="Remove a feed."
+
+  body.appendChild(header);
+  body.appendChild(feed);
+  body.appendChild(indent);
+  body.appendChild(button);
+}
+
+function removeFeed() {
+  var toRemove = document.getElementById("feedToRemove").value;
+
+  for (var i = 0; i<jsonContent.feeds.length; i++) {
+    if (jsonContent.feeds[i].name == toRemove) {
+      jsonContent.feeds.splice(i, 1);
+    }
+  }
+  var output = JSON.stringify(jsonContent)
+  writeToFile('feeds.json', output);
+}
+
+function writeToFile(file, toWrite) {
+  fs.writeFile(file, toWrite, (err) => {
     if (err) {
       console.error(err);
       return;
