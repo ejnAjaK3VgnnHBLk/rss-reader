@@ -4,18 +4,12 @@ const path = require('path');
 let window
 //delet if non wokr
 const template = [
-  {
-    label: 'Go home',
-    click() {
-      window.loadURL(`file://${__dirname}/src/index.html`)
-    }
-  },
-  {
+  /*{
     label: 'Dev tools',
     click() {
       window.webContents.openDevTools();
     }
-  }
+  } only enable for development*/
 ]
 
 const menu = Menu.buildFromTemplate(template)
